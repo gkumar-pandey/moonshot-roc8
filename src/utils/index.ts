@@ -1,3 +1,5 @@
+import { FilterEmailsType } from "../types/EmailTypes";
+
 export const formatTimestamp = (timestamp: number) => {
   const date = new Date(timestamp);
 
@@ -15,3 +17,19 @@ export const formatTimestamp = (timestamp: number) => {
 };
 
 export const API_URL = "https://flipkart-email-mock.now.sh/";
+
+export const filterEmails: FilterEmailsType = (emails, filterBy) => {
+  if (filterBy === "Unread") {
+    return emails?.filter((ele, idx) => !ele?.isRead);
+  }
+
+  if (filterBy === "Read") {
+    return emails?.filter((ele, idx) => ele?.isRead);
+  }
+
+  if (filterBy === "Favorite") {
+    return emails?.filter((ele, idx) => ele?.isFavorite);
+  }
+
+  return emails;
+};
