@@ -13,3 +13,15 @@ export const fetchEmailsService = async () => {
     return error;
   }
 };
+
+export const fetchEmailBodyService = async (id: string | undefined) => {
+  try {
+    const res = await axios.get(`${API_URL}?id=${id}`);
+    if (res.status == 200) {
+      return res.data;
+    }
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+};
