@@ -1,35 +1,46 @@
-import React from "react";
+import { FC } from "react";
 import Avatar from "../avatar/Avatar";
 import { formatTimestamp } from "../../utils";
+import { Email } from "../../types/EmailTypes";
 
-const EmailCard = ({}) => {
-  const email = {
-    id: "1",
-    from: {
-      email: "bounced@flipkart.com",
-      name: "bounced",
-    },
-    date: 1582729505000,
-    subject: "Lorem Ipsum",
-    short_description:
-      "Vestibulum sit amet ipsum aliquet, lacinia nulla malesuada, ullamcorper massa",
-  };
+interface EmailCardProps extends Email {
+  onClick: (id: string) => void;
+  isSelected?: boolean;
+}
 
+const EmailCard: FC<EmailCardProps> = ({
+  id,
+  from,
+  date,
+  subject,
+  short_description,
+  onClick,
+  isSelected,
+  isFavorite,
+  isRead,
+}) => {
   return (
-    <div className="flex flex-row gap-4 cursor-pointer rounded-lg px-6 py-4 border border-[var(--border-color)] text-[var(--text-color)]">
-      <Avatar name={email?.from.name} />
+    <div
+      onClick={() => onClick(id)}
+      className={`flex flex-row gap-4 cursor-pointer  rounded-lg px-6 py-4 border border-[var(--border-color)] text-[var(--text-color)] ${
+        isSelected && "border border-[var(--primary-color)]"
+      } ${isRead ? "bg-[var(--read-bg-color)]" : "bg-white"}`}>
+      <Avatar name={from.name} />
       <div>
         <p>
           <span>From: </span>
-          <strong> {email.from.name}</strong>
-          <strong> {`<${email.from.email}>`}</strong>
+          <strong> {from.name}</strong>
+          <strong> {`<${from.email}>`}</strong>
         </p>
         <p>
           <span>Subject </span>
-          <strong>{email.subject}</strong>
+          <strong>{subject}</strong>
         </p>
-        <p className="py-2">{email.short_description}</p>
-        <p>{formatTimestamp(email.date)}</p>
+        <p className="py-2 line-clamp-1 ">{short_description}</p>
+        <p>{formatTimestamp(date)}</p>{" "}
+        <span className="text-lg text-[var(--primary-color)]">
+          {isFavorite && "Favorite"}
+        </span>
       </div>
     </div>
   );
