@@ -1,8 +1,8 @@
 import { useEffect } from "react";
-import EmailCard from "../email-card/EmailCard";
+import EmailCard from "../EmailCard/EmailCard";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { fetchEmails } from "../../store/features/emailSlice";
-import EmailBody from "../email-body/EmailBody";
+import EmailBody from "../EmailBody/EmailBody";
 import { filterEmails } from "../../utils";
 
 const EmailList = () => {
