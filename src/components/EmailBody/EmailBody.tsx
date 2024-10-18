@@ -12,15 +12,20 @@ const EmailBody = () => {
   const [emailBody, setEmailBody] = useState<EmailBodyType | undefined>(
     undefined
   );
+  const [isLoading, setLoading] = useState<boolean>(false);
   const dispatch = useAppDispatch();
 
   //** Fetch selected email body data and update email body state */
   const fetchEmailBody = async () => {
     try {
+      setLoading(true);
       const data = await fetchEmailBodyService(selectedEmail?.id);
+
       setEmailBody(data);
+      setLoading(false);
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
 
@@ -42,10 +47,10 @@ const EmailBody = () => {
   }, [selectedEmail]);
 
   return (
-    <article className="border border-[var(--border-color)] rounded-md p-6 mr-4 bg-white gap-4 flex flex-row">
+    <article className="border border-[var(--border-color)] w-full rounded-md p-6 mr-4 bg-white gap-4 flex flex-row">
       <Avatar name={selectedEmail?.from.name} />
       <section className="flex flex-col gap-3">
-        <div className="flex flex-row items-center justify-between">
+        <div className="flex flex-row items-center justify-between w-full">
           <h2 className="text-3xl font-semibold text-[var(--text-color)]">
             {selectedEmail?.subject}
           </h2>
@@ -56,12 +61,18 @@ const EmailBody = () => {
           </Button>
         </div>
         <p>{formatTimestamp(selectedEmail?.date)}</p>
-        <section className="mt-4 mb-6">
-          <p
-            dangerouslySetInnerHTML={{
-              __html: String(emailBody?.body),
-            }}></p>
-        </section>
+        <div className="mt-4 mb-6">
+          {isLoading ? (
+            <h2 className="text-xl font-semibold text-center">Loading...</h2>
+          ) : (
+            <>
+              <p
+                dangerouslySetInnerHTML={{
+                  __html: String(emailBody?.body),
+                }}></p>
+            </>
+          )}
+        </div>
       </section>
     </article>
   );

@@ -19,12 +19,12 @@ const EmailList = () => {
   return (
     <div>
       {isLoading ? (
-        <p>Loading..</p>
+        <h2 className="text-3xl font-semibold text-center">Loading..</h2>
       ) : (
         <div className="flex flex-row gap-5">
           <div
             className={`flex flex-col gap-4 ${
-              selectedEmail ? "w-2/5" : "w-full"
+              selectedEmail ? "w-2/5 overflow-y-auto " : "w-full"
             }`}>
             {filteredEmails?.map((email, idx) => (
               <EmailCard key={email.id} {...email} />
