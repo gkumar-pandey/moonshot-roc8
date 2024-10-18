@@ -1,9 +1,10 @@
 import "./App.css";
+import Emails from "./pages/Emails";
 
 function App() {
   return (
     <>
-      <div>Hello world</div>
+      <Emails />
     </>
   );
 }
