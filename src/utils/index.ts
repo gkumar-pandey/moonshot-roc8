@@ -1,7 +1,7 @@
 import { FilterEmailsType } from "../types/EmailTypes";
 
-export const formatTimestamp = (timestamp: number) => {
-  const date = new Date(timestamp);
+export const formatTimestamp = (timestamp: number | undefined) => {
+  const date = new Date(Number(timestamp));
 
   // Extract date components
   const day = String(date.getDate()).padStart(2, "0");
@@ -32,4 +32,15 @@ export const filterEmails: FilterEmailsType = (emails, filterBy) => {
   }
 
   return emails;
+};
+
+// Store Updated Emails to LocalStorage
+export const storeDataToLocalStorage = (key: string, data: unknown) => {
+  localStorage.setItem(key, JSON.stringify(data));
+};
+
+// Retrieve Stored emails from localstorage
+export const getDataFromLocalStorage = (key: string) => {
+  const data = localStorage.getItem(key);
+  return (data && JSON.parse(data)) || [];
 };

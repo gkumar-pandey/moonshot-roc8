@@ -11,6 +11,12 @@ export interface Email {
   isFavorite?: boolean;
 }
 
-export interface EmailBody {
+export interface EmailBodyType {
   id: string;
+  body: string;
 }
+
+export type FilterEmailsType = (
+  emails: Email[] | [],
+  filterBy: string
+) => Email[];

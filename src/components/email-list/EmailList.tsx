@@ -1,19 +1,18 @@
 import { useEffect } from "react";
 import EmailCard from "../email-card/EmailCard";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { fetchEmails, updateEmail } from "../../store/features/emailSlice";
+import { fetchEmails } from "../../store/features/emailSlice";
 import EmailBody from "../email-body/EmailBody";
 import { filterEmails } from "../../utils";
 
 const EmailList = () => {
-  const { emails, isLoading, error, filterBy, selectedEmail } = useAppSelector(
-    state => state.emails
-  );
+  const { emails, isLoading, error, filterBy, selectedEmail, currPage } =
+    useAppSelector(state => state.emails);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(fetchEmails());
-  }, []);
+    dispatch(fetchEmails(currPage));
+  }, [currPage]);
 
   const filteredEmails = filterEmails(emails, filterBy);
 

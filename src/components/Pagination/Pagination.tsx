@@ -3,10 +3,12 @@ import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { updateCurrPage } from "../../store/features/emailSlice";
 
 const Pagination = () => {
-  const { currPage, totalEmails } = useAppSelector(state => state.emails);
+  const { currPage, totalEmails, emails } = useAppSelector(
+    state => state.emails
+  );
   const dispatch = useAppDispatch();
 
-  const emailsPerPage = 5;
+  const emailsPerPage = 10;
   const totalPages = Math.ceil(totalEmails / emailsPerPage);
 
   const handleNextPageBtn = () => {
@@ -21,10 +23,6 @@ const Pagination = () => {
     }
   };
 
-  const handlePageBtn = (num: number) => {
-    dispatch(updateCurrPage(num));
-  };
-
   return (
     <div className="flex items-center gap-4">
       <button
@@ -33,15 +31,9 @@ const Pagination = () => {
         <IoIosArrowBack />
       </button>
       <div className="flex items-center gap-1">
-        {[...Array(totalPages)].map((_, idx) => (
-          <button
-            onClick={() => handlePageBtn(idx + 1)}
-            className={`px-2 py-1 border-[var(--border-color)] font-medium text-[var(--text-color)] border rounded-md cursor-pointer ${
-              currPage === idx + 1 && "bg-[var(--primary-color)] text-white"
-            }`}>
-            {idx + 1}
-          </button>
-        ))}
+        <span>
+          {emails[0]?.id} - {emails[emails?.length - 1]?.id} of {totalEmails}
+        </span>
       </div>
       <button
         onClick={handleNextPageBtn}

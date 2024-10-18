@@ -1,13 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Email } from "../../types/EmailTypes";
 import { fetchEmailsService } from "../../services/emailServices";
+import { getDataFromLocalStorage, storeDataToLocalStorage } from "../../utils";
 
 interface EmailState {
-  emails: Email[] | undefined;
+  emails: Email[] | [];
   isLoading: boolean;
   error: string | null;
   filterBy: "All" | "Unread" | "Read" | "Favorite";
   selectedEmail: Email | null;
+  totalEmails: number;
+  currPage: number;
 }
 
 const initialState: EmailState = {
@@ -16,6 +19,8 @@ const initialState: EmailState = {
   error: null,
   filterBy: "All",
   selectedEmail: null,
+  totalEmails: 0,
+  currPage: 1,
 };
 
 export const fetchEmails = createAsyncThunk("fetchemails", fetchEmailsService);
@@ -25,11 +30,18 @@ const emailSlice = createSlice({
   initialState,
   reducers: {
     updateEmail: (state, action) => {
-      state.emails = state.emails?.map((email, idx) => {
+      const updatedEmails = state.emails?.map((email, idx) => {
         return email.id === action.payload.id
           ? { ...email, ...action.payload.change }
           : email;
       });
+      state.emails = updatedEmails;
+
+      const persistedEmails = updatedEmails.filter(
+        (email, idx) => email.isRead || email.isFavorite
+      );
+      storeDataToLocalStorage("persistedEmails", persistedEmails);
+
       if (state.selectedEmail?.id === action.payload.id) {
         state.selectedEmail = {
           ...state.selectedEmail,
@@ -43,6 +55,9 @@ const emailSlice = createSlice({
     setSelectedEmail: (state, action) => {
       state.selectedEmail = action.payload;
     },
+    updateCurrPage: (state, action) => {
+      state.currPage = action.payload;
+    },
   },
   extraReducers: builder => {
     builder.addCase(fetchEmails.pending, (state, action) => {
@@ -52,7 +67,20 @@ const emailSlice = createSlice({
     builder.addCase(fetchEmails.fulfilled, (state, action) => {
       state.isLoading = false;
 
-      state.emails = action.payload.list;
+      const persistedEmails: Email[] =
+        getDataFromLocalStorage("persistedEmails");
+
+      const mergeEmails = action.payload.list.map(
+        (email: Email[], idx: number) => {
+          const storedEmail: Email | undefined = persistedEmails?.find(
+            (ele, idx) => email?.id === ele?.id
+          );
+          return storedEmail ? { ...email, ...storedEmail } : email;
+        }
+      );
+
+      state.emails = mergeEmails;
+      state.totalEmails = action.payload.total;
       state.error = null;
     });
     builder.addCase(fetchEmails.rejected, (state, action) => {
@@ -62,6 +90,6 @@ const emailSlice = createSlice({
   },
 });
 
-export const { updateEmail, setFilterBy, setSelectedEmail } =
+export const { updateEmail, setFilterBy, setSelectedEmail, updateCurrPage } =
   emailSlice.actions;
 export default emailSlice.reducer;

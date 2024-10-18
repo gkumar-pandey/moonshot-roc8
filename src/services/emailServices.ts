@@ -1,9 +1,9 @@
 import axios from "axios";
 import { API_URL } from "../utils";
 
-export const fetchEmailsService = async () => {
+export const fetchEmailsService = async (pageNum: number) => {
   try {
-    const res = await axios.get(`${API_URL}`);
+    const res = await axios.get(`${API_URL}?page=${pageNum}`);
 
     if (res.status == 200) {
       return res.data;
