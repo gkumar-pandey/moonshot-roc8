@@ -2,28 +2,44 @@ import { FC } from "react";
 import Avatar from "../avatar/Avatar";
 import { formatTimestamp } from "../../utils";
 import { Email } from "../../types/EmailTypes";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { setSelectedEmail, updateEmail } from "../../store/features/emailSlice";
 
-interface EmailCardProps extends Email {
-  onClick: (id: string) => void;
-  isSelected?: boolean;
-}
-
-const EmailCard: FC<EmailCardProps> = ({
+const EmailCard: FC<Email> = ({
   id,
   from,
   date,
   subject,
   short_description,
-  onClick,
-  isSelected,
   isFavorite,
   isRead,
 }) => {
+  const { selectedEmail } = useAppSelector(state => state.emails);
+  const dispatch = useAppDispatch();
+
+  // check current email body is open
+  const isCurrEmailBodyOpen = selectedEmail?.id === id;
+
+  // update selected email state
+  const handleOpenEmailBody = () => {
+    const currEmail = {
+      id,
+      from,
+      date,
+      subject,
+      short_description,
+      isFavorite,
+      isRead,
+    };
+    dispatch(setSelectedEmail(currEmail));
+    dispatch(updateEmail({ id: id, change: { isRead: true } }));
+  };
+
   return (
     <div
-      onClick={() => onClick(id)}
+      onClick={handleOpenEmailBody}
       className={`flex flex-row gap-4 cursor-pointer  rounded-lg px-6 py-4 border border-[var(--border-color)] text-[var(--text-color)] ${
-        isSelected && "border border-[var(--primary-color)]"
+        isCurrEmailBodyOpen && "border border-[var(--primary-color)]"
       } ${isRead ? "bg-[var(--read-bg-color)]" : "bg-white"}`}>
       <Avatar name={from.name} />
       <div>
@@ -37,10 +53,12 @@ const EmailCard: FC<EmailCardProps> = ({
           <strong>{subject}</strong>
         </p>
         <p className="py-2 line-clamp-1 ">{short_description}</p>
-        <p>{formatTimestamp(date)}</p>{" "}
-        <span className="text-lg text-[var(--primary-color)]">
-          {isFavorite && "Favorite"}
-        </span>
+        <p className="flex items-center gap-2">
+          <span>{formatTimestamp(date)}</span>
+          <span className="text-base font-medium text-[var(--primary-color)]">
+            {isFavorite && "Favorite"}
+          </span>
+        </p>
       </div>
     </div>
   );

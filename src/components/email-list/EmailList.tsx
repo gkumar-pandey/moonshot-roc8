@@ -1,16 +1,12 @@
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import EmailCard from "../email-card/EmailCard";
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { fetchEmails, updateEmail } from "../../store/features/emailSlice";
 import EmailBody from "../email-body/EmailBody";
-import { Email } from "../../types/EmailTypes";
 import { filterEmails } from "../../utils";
 
 const EmailList = () => {
-  const [selectedEmail, setSelectedEmail] = useState<Email | undefined>(
-    undefined
-  );
-  const { emails, isLoading, error, filterBy } = useAppSelector(
+  const { emails, isLoading, error, filterBy, selectedEmail } = useAppSelector(
     state => state.emails
   );
   const dispatch = useAppDispatch();
@@ -18,12 +14,6 @@ const EmailList = () => {
   useEffect(() => {
     dispatch(fetchEmails());
   }, []);
-
-  const selectEmailHandler = (id: string) => {
-    const email = emails?.find(email => email.id == id);
-    dispatch(updateEmail({ id: id, change: { isRead: true } }));
-    setSelectedEmail(email);
-  };
 
   const filteredEmails = filterEmails(emails, filterBy);
 
@@ -38,17 +28,12 @@ const EmailList = () => {
               selectedEmail ? "w-2/5" : "w-full"
             }`}>
             {filteredEmails?.map((email, idx) => (
-              <EmailCard
-                onClick={selectEmailHandler}
-                key={email.id}
-                {...email}
-                isSelected={selectedEmail?.id === email.id}
-              />
+              <EmailCard key={email.id} {...email} />
             ))}
           </div>
           {selectedEmail && (
             <div className={`w-3/5`}>
-              <EmailBody email={selectedEmail} />
+              <EmailBody />
             </div>
           )}
         </div>
