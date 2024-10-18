@@ -1,4 +1,3 @@
-// src/features/counterSlice.ts
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Email } from "../../types/EmailTypes";
 import { fetchEmailsService } from "../../services/emailServices";
@@ -8,6 +7,7 @@ interface EmailState {
   isLoading: boolean;
   error: string | null;
   filterBy: "All" | "Unread" | "Read" | "Favorite";
+  selectedEmail: Email | null;
 }
 
 const initialState: EmailState = {
@@ -15,6 +15,7 @@ const initialState: EmailState = {
   isLoading: false,
   error: null,
   filterBy: "All",
+  selectedEmail: null,
 };
 
 export const fetchEmails = createAsyncThunk("fetchemails", fetchEmailsService);
@@ -29,6 +30,18 @@ const emailSlice = createSlice({
           ? { ...email, ...action.payload.change }
           : email;
       });
+      if (state.selectedEmail?.id === action.payload.id) {
+        state.selectedEmail = {
+          ...state.selectedEmail,
+          ...action.payload.change,
+        };
+      }
+    },
+    setFilterBy: (state, action) => {
+      state.filterBy = action.payload;
+    },
+    setSelectedEmail: (state, action) => {
+      state.selectedEmail = action.payload;
     },
   },
   extraReducers: builder => {
@@ -49,5 +62,6 @@ const emailSlice = createSlice({
   },
 });
 
-export const { updateEmail } = emailSlice.actions;
+export const { updateEmail, setFilterBy, setSelectedEmail } =
+  emailSlice.actions;
 export default emailSlice.reducer;
