@@ -38,3 +38,19 @@ export const decodeToken = token => {
   const decodedToken = jwt.verify(token, SECRET_KEY);
   return decodedToken;
 };
+
+/**
+ * @description compare plain text password with hashed password for match
+ * @param {String} password - The plain text password
+ * @param {String} existingPassword - The hashed password stored in the database
+ * @returns {Boolean} - True if the password matched, False otherwise.
+ */
+export const comparePassword = async (password, existingPassword) => {
+  try {
+    const isPassMatched = await bcrypt.compare(password, existingPassword);
+    return isPassMatched;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
