@@ -16,3 +16,14 @@ export const hashPassword = async password => {
     throw error;
   }
 };
+
+/**
+ * @description Generates a JWT (JSON Web Token) using the provided payload.
+ * @param {Object} payload - Object contains user id and email
+ * @returns {String} - The generated JWT token.
+ */
+export const generateToken = payload => {
+  const SECRET_KEY = process.env.SECRET_KEY;
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "24h" });
+  return token;
+};
