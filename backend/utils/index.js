@@ -27,3 +27,14 @@ export const generateToken = payload => {
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "24h" });
   return token;
 };
+
+/**
+ * @description Decodes a JWT (JSON Web Token) to extract the original payload.
+ * @param {String} token - The JWT token to decode.
+ * @returns {Object} - The decoded token payload.
+ */
+export const decodeToken = token => {
+  const SECRET_KEY = process.env.SECRET_KEY;
+  const decodedToken = jwt.verify(token, SECRET_KEY);
+  return decodedToken;
+};
