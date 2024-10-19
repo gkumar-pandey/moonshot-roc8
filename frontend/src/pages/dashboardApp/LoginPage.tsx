@@ -1,6 +1,5 @@
 import { Navbar } from "../../components/dataDashboard";
 import LoginForm from "../../components/dataDashboard/Form/LoginForm";
-import { Container } from "../../components/EmailApp";
 
 const LoginPage = () => {
   return (
