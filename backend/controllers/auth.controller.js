@@ -44,3 +44,50 @@ export const signupController = async (req, res) => {
     throw error;
   }
 };
+
+/**
+ * @route POST /api/auth/login
+ * @description Handles user authentication and login.
+ * @param {Object} req - Express request object containing user credentials.
+ * @param {Object} res - Express response object.
+ * @returns {Object} JSON response indicating login success or failure.
+ */
+export const loginController = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    //* check all required fields
+    if (!email || !password) {
+      return res.status(500).json({ message: "email & password required.." });
+    }
+    //* check user exist
+    const existingUser = await User.findOne({ email: email });
+    if (!existingUser) {
+      return res.status(404).json({ message: "User not exist." });
+    }
+    //* check password
+    const isPassMatched = await comparePassword(
+      password,
+      existingUser.password
+    );
+    if (!isPassMatched) {
+      return res.status(401).json({ message: "Password not matched!." });
+    }
+
+    //* generate token
+    const payloadForToken = {
+      _id: existingUser._id,
+      email: existingUser.email,
+    };
+    const token = generateToken(payloadForToken);
+    //* Hide password
+    existingUser.password = undefined;
+    res.status(200).json({
+      message: "Login successfully",
+      token,
+      user: existingUser,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error", error });
+    throw error;
+  }
+};
