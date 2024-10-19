@@ -1,5 +1,9 @@
-import User from "../model/user.model";
-import { hashPassword, comparePassword, generateToken } from "../utils";
+import User from "../model/user.model.js";
+import {
+  hashPassword,
+  comparePassword,
+  generateToken,
+} from "../utils/index.js";
 
 /**
  * @route POST /api/auth/signup
