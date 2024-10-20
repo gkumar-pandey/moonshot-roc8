@@ -3,6 +3,9 @@ import Data from "../model/data.model.js";
 export const getDataController = async (req, res) => {
   try {
     const data = await Data.find();
+    const sortedDatabydate = data.sort(
+      (a, b) => new Date(a.date) - new Date(b.date)
+    );
     return res.status(200).json({ data: data });
   } catch (error) {
     console.log(error);
