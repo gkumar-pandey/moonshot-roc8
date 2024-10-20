@@ -1,8 +1,15 @@
-import { Container, EmailList, FilterBar, Pagination } from "../components";
+import { Navbar } from "../../components/dataDashboard";
+import {
+  Container,
+  EmailList,
+  FilterBar,
+  Pagination,
+} from "../../components/EmailApp";
 
-const Emails = () => {
+const EmailApp = () => {
   return (
     <main className="bg-[var(--bg-color)] w-full min-h-screen">
+      <Navbar />
       <Container>
         <section className="flex items-center justify-between">
           <FilterBar />
@@ -14,4 +21,4 @@ const Emails = () => {
   );
 };
 
-export default Emails;
+export default EmailApp;
