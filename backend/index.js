@@ -15,7 +15,7 @@ app.use(cors());
 app.use(helmet());
 connectDB();
 
-app.use("/", (req, res) => {
+app.get("/", (req, res) => {
   res.status(200).json("Server is Running...");
 });
 
