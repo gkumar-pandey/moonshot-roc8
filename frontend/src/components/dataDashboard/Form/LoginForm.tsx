@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { useAppDispatch } from "../../../store/hooks";
 import { setUser } from "../../../store/features/dashboard/authSlice";
 import { loginService } from "../../../services/dashboardServices/authServices";
+import Cookies from "js-cookie";
 
 const LoginForm = () => {
   const [loginFormData, setLoginFormData] = useState<{
@@ -36,7 +37,10 @@ const LoginForm = () => {
     try {
       const res = await loginService(loginFormData);
       if (res?.status === 200) {
-        dispatch(setUser({ user: res?.data?.user, token: res?.data?.token }));
+        const userObj = { user: res?.data?.user, token: res?.data?.token };
+
+        dispatch(setUser(userObj));
+        Cookies.set("user", JSON.stringify(userObj), { expires: 1 });
         resetLoginForm();
         toast.dismiss(toastId);
         toast.success("Login Successfully");

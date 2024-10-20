@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import Input from "../Input/Input";
 import Button from "../Button/Button";
 import { Link } from "react-router-dom";
+import { signupService } from "../../../services/dashboardServices/authServices";
+import { useAppDispatch } from "../../../store/hooks";
+import { setUser } from "../../../store/features/dashboard/authSlice";
+import toast from "react-hot-toast";
 
 const SignupForm = () => {
   const [signupFormData, setSignupFormData] = useState<{
@@ -15,6 +19,8 @@ const SignupForm = () => {
     password: "",
     confirmPassword: "",
   });
+  const dispatch = useAppDispatch();
+  const [error, setError] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSignupFormData(pre => ({ ...pre, [e.target.name]: e.target.value }));
@@ -60,11 +66,30 @@ const SignupForm = () => {
     },
   ];
 
+  const handleSignupFormSubmit = async () => {
+    const toastId = toast.loading("Loading..");
+    try {
+      const res = await signupService(signupFormData);
+      if (res.status === 200) {
+        dispatch(setUser({ user: res?.data?.user, token: res?.data?.token }));
+        toast.dismiss(toastId);
+        toast.success("Signup Successfully.");
+      } else {
+        setError("Something wents wrong!");
+        toast.dismiss(toastId);
+      }
+    } catch (error: any) {
+      console.log(error);
+      toast.dismiss(toastId);
+      setError(error.message || "Something wents wrong!");
+    }
+  };
+
   return (
     <div
       className={`bg-white  border border-[var(--border-color)] py-8 px-6 rounded-xl gap-6 flex flex-col w-full max-w-[500px]`}>
       <h1 className="text-3xl font-bold text-center ">Signup</h1>
-      <form className="flex flex-col gap-6">
+      <form onSubmit={handleSignupFormSubmit} className="flex flex-col gap-6">
         {formInputs.map((ele, idx) => (
           <Input key={idx} {...ele} />
         ))}

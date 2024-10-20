@@ -71,7 +71,7 @@ const emailSlice = createSlice({
         getDataFromLocalStorage("persistedEmails");
 
       const mergeEmails = action.payload.list.map(
-        (email: Email[], idx: number) => {
+        (email: Email, idx: number) => {
           const storedEmail: Email | undefined = persistedEmails?.find(
             (ele, idx) => email?.id === ele?.id
           );
