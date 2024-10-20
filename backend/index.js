@@ -15,6 +15,10 @@ app.use(cors());
 app.use(helmet());
 connectDB();
 
+app.use("/", (req, res) => {
+  res.status(200).json("Server is Running...");
+});
+
 app.use("/api/v1", routes);
 
 const PORT = process.env.PORT || 6969;
