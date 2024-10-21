@@ -2,7 +2,7 @@ import { SignupFormData } from "./../../types/dashboard/DashboardTypes";
 import axios, { AxiosResponse } from "axios";
 import { LoginFormData } from "../../types/dashboard/DashboardTypes";
 
-export const BASE_URL = "https://moonshot-roc8.vercel.app/api/v1/";
+export const BASE_URL = "https://moonshot-roc8.vercel.app/api/v1";
 
 export const loginService = async (loginFormData: LoginFormData) => {
   try {
