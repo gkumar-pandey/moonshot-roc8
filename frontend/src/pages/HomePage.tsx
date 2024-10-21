@@ -24,9 +24,9 @@ const AppCard = ({
 
 const HomePage = () => {
   const dataDashboardApp =
-    "https://awesomescreenshot.s3.amazonaws.com/image/3268519/51169810-230aaa055f0427ea3fc15c9daaa9677d.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJSCJQ2NM3XLFPVKA%2F20241020%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20241020T083050Z&X-Amz-Expires=28800&X-Amz-SignedHeaders=host&X-Amz-Signature=8d79cb19b169a56f2c3341a261a63f0c54f17525f4aedc06c6cf6da5243255fb";
+    "https://res.cloudinary.com/dlykup1dh/image/upload/v1729516159/Vite_React_TS_makdjs.png";
   const emailApp =
-    "https://awesomescreenshot.s3.amazonaws.com/image/3268519/51169825-7652600753019f132e868ea69548a120.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAJSCJQ2NM3XLFPVKA%2F20241020%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20241020T083144Z&X-Amz-Expires=28800&X-Amz-SignedHeaders=host&X-Amz-Signature=b275dfc5e3f5c327374995f8802b144b32098bd6d753243b06e1ce143ff36545";
+    "https://res.cloudinary.com/dlykup1dh/image/upload/v1729516174/Vite_React_TS_1_zlrhtn.png";
   return (
     <div className="bg-[var(--bg-color)] min-h-dvh">
       <Navbar />
